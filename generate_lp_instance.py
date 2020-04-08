@@ -40,9 +40,37 @@ def generate_cplex_lp():
     cplex_lp.write("\n")
 
     cplex_lp.write("Subject To\n")
+    # contrainte C5
     for j in range(0, int(instance_liste[0][1])):
-        cplex_lp.write("    " + "cst"+": ")
+        cplex_lp.write("    " + "cst_l_" + str(j + 1) + ": ")
+        for i in range(1, len(instance_liste)):
+            if i == 1:
+                cplex_lp.write(str(instance_liste[i][0]) + " X_" + str(i) + "_" + str(j + 1) + " ")
+            else:
+                cplex_lp.write("+ " + str(instance_liste[i][0]) + " X_" + str(i) + "_" + str(j + 1) + " ")
+        cplex_lp.write("- " + str(instance_liste[0][0]) + " C_" + str(j + 1) + " <= 0\n")
 
+    # contrainte C4
+    for i in range(1, len(instance_liste)):
+        cplex_lp.write("    " + "cst_s_" + str(i) + ": ")
+        for j in range(0, int(instance_liste[0][1])):
+            if j == 0:
+                cplex_lp.write(" X_" + str(i) + "_" + str(j + 1) + " ")
+            else:
+                cplex_lp.write("+ X_" + str(i) + "_" + str(j + 1) + " ")
+        cplex_lp.write("= " + str(instance_liste[i][1]) + "\n")
+
+    # contrainte C3
+    cplex_lp.write("    " + "cst_cj: ")
+    for c in range(0, int(instance_liste[0][1])):
+        if c == 0:
+            cplex_lp.write("C_" + str(c + 1))
+        else:
+            cplex_lp.write(" + C_" + str(c + 1))
+    cplex_lp.write(" - " + str(instance_liste[0][1]) + " <= 0\n")
+
+
+    # bounds and variables
     cplex_lp.write("Bounds\n")
     for i in range(0, len(instance_liste) - 1):
         for j in range(0, int(instance_liste[0][1])):
@@ -56,6 +84,8 @@ def generate_cplex_lp():
     cplex_lp.write("Binary\n")
     for c in range(0, int(instance_liste[0][1])):
         cplex_lp.write("    " + "C_" + str(c + 1) + "\n")
+
+    cplex_lp.close()
 
 
 generate_cplex_lp()
