@@ -27,7 +27,6 @@ print(instance_liste)
 
 # create and fill the cplex file
 def generate_cplex_lp():
-    print('a')
     cplex_lp = open('CPLEX.lp', "w+")
 
     cplex_lp.write("Minimize\n")
@@ -67,7 +66,7 @@ def generate_cplex_lp():
             cplex_lp.write("C_" + str(c + 1))
         else:
             cplex_lp.write(" + C_" + str(c + 1))
-    cplex_lp.write(" - " + str(instance_liste[0][1]) + " <= 0\n")
+    cplex_lp.write(" <= "+ str(instance_liste[0][1])+"\n")
 
 
     # bounds and variables
