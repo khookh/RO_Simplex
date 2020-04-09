@@ -20,13 +20,14 @@ with open(instance_path, "r") as f:
                 k = 1
             if line[x] != ' ' and line[x] != '\n':
                 a[k] += line[x]
-        instance_liste.append(a)
+        if(a[0]!='')and(a[1]!=''):
+            instance_liste.append(a)
 
 print(instance_liste)
 
 
 # create and fill the cplex file
-def generate_cplex_lp():
+def generate_cplex():
     cplex_lp = open('CPLEX.lp', "w+")
 
     cplex_lp.write("Minimize\n")
@@ -86,5 +87,4 @@ def generate_cplex_lp():
 
     cplex_lp.close()
 
-
-generate_cplex_lp()
+generate_cplex()
